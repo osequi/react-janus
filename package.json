@@ -33,6 +33,7 @@
     ]
   },
   "devDependencies": {
-    "@metamn/new-component": "0.1.2"
+    "@metamn/new-component": "0.1.2",
+    "prettier": "^2.1.1"
   }
 }
