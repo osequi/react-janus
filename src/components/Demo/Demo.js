@@ -26,6 +26,7 @@ const Container = styled("section")((props) => ({
   width: "100vw",
   height: "100vh",
   position: "relative",
+  overflowX: "hidden",
 }));
 
 const Content1 = styled("article")((props) => ({
@@ -36,15 +37,22 @@ const Content1 = styled("article")((props) => ({
   left: 0,
 }));
 
-const Content2 = styled("article")((props) => ({
-  width: "100vw",
-  height: "100vh",
-  position: "absolute",
-  top: 0,
-  left: `${props.mouseX}px`,
-  color: "white",
-  background: "black",
-}));
+/**
+ * Optimized version
+ * - suggested by the console
+ */
+const Content2 = styled.div.attrs((props) => ({
+  style: {
+    left: `${props.mouseX}px`,
+  },
+}))`
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  color: white;
+  background: black;
+`;
 
 /**
  * Displays the component
