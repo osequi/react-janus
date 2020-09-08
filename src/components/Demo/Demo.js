@@ -16,6 +16,16 @@ const propTypes = {
    * @type {string}
    */
   height: PropTypes.string,
+  /**
+   * The content of the underlying layer
+   * @type {any}
+   */
+  content1: PropTypes.any,
+  /**
+   * The content of the top layer
+   * @type {any}
+   */
+  content2: PropTypes.any,
 };
 
 /**
@@ -24,12 +34,13 @@ const propTypes = {
 const defaultProps = {
   width: "100vw",
   height: "100vh",
+  content1: "Content1",
+  content2: "Content2",
 };
 
 /**
  * Defines the styles
  */
-
 const GlobalStyle = createGlobalStyle`
    body {
      margin: 0
@@ -49,16 +60,6 @@ const Content1 = styled("article")((props) => ({
   position: "absolute",
   top: 0,
   left: 0,
-}));
-
-const Content22 = styled("article")((props) => ({
-  width: `${props.width}`,
-  height: `${props.height}`,
-  position: "absolute",
-  top: 0,
-  left: `${props.mouseX}px`,
-  color: "white",
-  background: "black",
 }));
 
 /**
@@ -82,6 +83,8 @@ const Content2 = styled.article.attrs((props) => ({
  * Displays the component
  */
 const Demo = (props) => {
+  const { content1, content2, ...rest } = props;
+
   const [mouseX, setMouseX] = useState(0);
 
   const handleMouseMove = (event) => {
@@ -92,12 +95,12 @@ const Demo = (props) => {
   return (
     <>
       <GlobalStyle />
-      <Container className="Demo" onMouseMove={handleMouseMove} {...props}>
-        <Content1 className="Content1" mouseX={mouseX} {...props}>
-          Content1
+      <Container className="Demo" onMouseMove={handleMouseMove} {...rest}>
+        <Content1 className="Content1" mouseX={mouseX} {...rest}>
+          {content1}
         </Content1>
-        <Content2 className="Content2" mouseX={mouseX} {...props}>
-          Content2
+        <Content2 className="Content2" mouseX={mouseX} {...rest}>
+          {content2}
         </Content2>
       </Container>
     </>
