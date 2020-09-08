@@ -41,7 +41,7 @@ const Content1 = styled("article")((props) => ({
  * Optimized version
  * - suggested by the console
  */
-const Content2 = styled.div.attrs((props) => ({
+const Content2 = styled.article.attrs((props) => ({
   style: {
     left: `${props.mouseX}px`,
   },
