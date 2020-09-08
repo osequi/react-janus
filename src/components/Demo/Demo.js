@@ -58,7 +58,7 @@ const Container = styled("section")((props) => ({
   height: `${props.height}`,
   position: "relative",
   overflowX: "hidden",
-  cursor: `${props.cursor}`,
+  cursor: props.enabled ? `${props.cursor}` : "auto",
 }));
 
 const Content1 = styled("article")((props) => ({
@@ -92,9 +92,24 @@ const Content2 = styled.article.attrs((props) => ({
 const Demo = (props) => {
   const { content1, content2, ...rest } = props;
 
+  /**
+   * Switches on/off the mouse event
+   * @type {boolean}
+   */
+  const [enabled, setEnabled] = useState(true);
+
+  const handleOnClick = () => {
+    setEnabled(!enabled);
+  };
+
+  /**
+   * Manages the horizontal position of the cursor
+   * @type {integer}
+   */
   const [mouseX, setMouseX] = useState(0);
 
   const handleMouseMove = (event) => {
+    if (!enabled) return;
     const { clientX } = event;
     setMouseX(clientX);
   };
@@ -102,7 +117,13 @@ const Demo = (props) => {
   return (
     <>
       <GlobalStyle />
-      <Container className="Demo" onMouseMove={handleMouseMove} {...rest}>
+      <Container
+        className="Demo"
+        onMouseMove={handleMouseMove}
+        onClick={handleOnClick}
+        enabled={enabled}
+        {...rest}
+      >
         <Content1 className="Content1" mouseX={mouseX} {...rest}>
           {content1}
         </Content1>
