@@ -5,7 +5,9 @@ import styled, { createGlobalStyle } from "styled-components";
 /**
  * Defines the prop types
  */
-const propTypes = {};
+const propTypes = {
+  width: PropTypes.string,
+};
 
 /**
  * Defines the default props
