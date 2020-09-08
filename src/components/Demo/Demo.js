@@ -41,6 +41,12 @@ const propTypes = {
    * @type {any}
    */
   cursor: PropTypes.any,
+  /**
+   * On click the effect can be disabled / enabled.
+   * This comes handy when the user wants to interact with another element.
+   * @type {boolean}
+   */
+  disableEffectOnClick: PropTypes.bool,
 };
 
 /**
@@ -49,11 +55,14 @@ const propTypes = {
 const defaultProps = {
   width: "100vw",
   height: "100vh",
-  content1: "Content1",
-  content2: "Content2",
+  content1:
+    "Content1. Click anywhere to stop the mouse drag effect. Then click again to re-enable the effect.",
+  content2:
+    "Content2. Click anywhere to stop the mouse drag effect. Then click again to re-enable the effect.",
   content1Classname: "Content1",
   content2Classname: "Content2",
   cursor: "col-resize",
+  disableEffectOnClick: true,
 };
 
 /**
@@ -107,11 +116,12 @@ const Demo = (props) => {
     content2,
     content1Classname,
     content2Classname,
+    disableEffectOnClick,
     ...rest
   } = props;
 
   /**
-   * Switches on/off the mouse event
+   * Manages the state of the effect
    * @type {boolean}
    */
   const [enabled, setEnabled] = useState(true);
@@ -122,11 +132,19 @@ const Demo = (props) => {
    * @return null
    */
   const handleOnClick = (event) => {
+    /**
+     * The click can be enabled / disabled by props
+     */
+    if (!disableEffectOnClick) return;
+
     const { target } = event;
     const { classList } = target;
     const { value } = classList;
-    console.log("target:", value);
 
+    /**
+     * The click is handled only when it happens on a blank space.
+     * When the user clicks on a button, link etc the click is not handled.
+     */
     const clickMustBeHandled =
       (value && value.includes(content1Classname)) ||
       value.includes(content2Classname);
@@ -142,24 +160,20 @@ const Demo = (props) => {
    */
   const [mouseX, setMouseX] = useState(0);
 
+  /**
+   * Handles the cursor move
+   * @param  {SyntheticEvent} event The event
+   * @return null
+   */
   const handleMouseMove = (event) => {
+    /**
+     * The effect works only when it's enabled
+     */
     if (!enabled) return;
 
     const { clientX } = event;
     setMouseX(clientX);
   };
-
-  const contentWithClickableElement = (
-    <>
-      <p>Content</p>
-      <p>
-        <button>button</button>
-      </p>
-      <p>
-        <a href="#">Inline link</a>
-      </p>
-    </>
-  );
 
   return (
     <>
@@ -172,7 +186,7 @@ const Demo = (props) => {
         {...rest}
       >
         <Content1 className="Content1" mouseX={mouseX} {...rest}>
-          {contentWithClickableElement}
+          {content1}
         </Content1>
         <Content2 className="Content2" mouseX={mouseX} {...rest}>
           {content2}
