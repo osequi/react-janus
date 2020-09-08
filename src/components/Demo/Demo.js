@@ -6,13 +6,25 @@ import styled, { createGlobalStyle } from "styled-components";
  * Defines the prop types
  */
 const propTypes = {
+  /**
+   * The width of the component
+   * @type {string}
+   */
   width: PropTypes.string,
+  /**
+   * The height of the component
+   * @type {string}
+   */
+  height: PropTypes.string,
 };
 
 /**
  * Defines the default props
  */
-const defaultProps = {};
+const defaultProps = {
+  width: "100vw",
+  height: "100vh",
+};
 
 /**
  * Defines the styles
@@ -25,18 +37,28 @@ const GlobalStyle = createGlobalStyle`
  `;
 
 const Container = styled("section")((props) => ({
-  width: "100vw",
-  height: "100vh",
+  width: `${props.width}`,
+  height: `${props.height}`,
   position: "relative",
   overflowX: "hidden",
 }));
 
 const Content1 = styled("article")((props) => ({
-  width: "100vw",
-  height: "100vh",
+  width: `${props.width}`,
+  height: `${props.height}`,
   position: "absolute",
   top: 0,
   left: 0,
+}));
+
+const Content22 = styled("article")((props) => ({
+  width: `${props.width}`,
+  height: `${props.height}`,
+  position: "absolute",
+  top: 0,
+  left: `${props.mouseX}px`,
+  color: "white",
+  background: "black",
 }));
 
 /**
@@ -46,10 +68,10 @@ const Content1 = styled("article")((props) => ({
 const Content2 = styled.article.attrs((props) => ({
   style: {
     left: `${props.mouseX}px`,
+    width: `${props.width}`,
+    height: `${props.height}`,
   },
 }))`
-  width: 100vw;
-  height: 100vh;
   position: absolute;
   top: 0;
   color: white;
@@ -70,9 +92,13 @@ const Demo = (props) => {
   return (
     <>
       <GlobalStyle />
-      <Container className="Demo" onMouseMove={handleMouseMove}>
-        <Content1 mouseX={mouseX}>Content1</Content1>
-        <Content2 mouseX={mouseX}>Content2</Content2>
+      <Container className="Demo" onMouseMove={handleMouseMove} {...props}>
+        <Content1 className="Content1" mouseX={mouseX} {...props}>
+          Content1
+        </Content1>
+        <Content2 className="Content2" mouseX={mouseX} {...props}>
+          Content2
+        </Content2>
       </Container>
     </>
   );
