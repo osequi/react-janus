@@ -20,8 +20,11 @@ CustomSize.args = {
 
 export const CustomContent = Template.bind({});
 CustomContent.args = {
-  width: "50vw",
-  height: "30vh",
   content1: "This is the underlying layer",
   content2: "This is the top layer",
+};
+
+export const CustomCursor = Template.bind({});
+CustomCursor.args = {
+  cursor: "pointer",
 };

@@ -26,6 +26,11 @@ const propTypes = {
    * @type {any}
    */
   content2: PropTypes.any,
+  /**
+   * The shape of the cursor
+   * @type {any}
+   */
+  cursor: PropTypes.any,
 };
 
 /**
@@ -36,6 +41,7 @@ const defaultProps = {
   height: "100vh",
   content1: "Content1",
   content2: "Content2",
+  cursor: "col-resize",
 };
 
 /**
@@ -52,6 +58,7 @@ const Container = styled("section")((props) => ({
   height: `${props.height}`,
   position: "relative",
   overflowX: "hidden",
+  cursor: `${props.cursor}`,
 }));
 
 const Content1 = styled("article")((props) => ({
