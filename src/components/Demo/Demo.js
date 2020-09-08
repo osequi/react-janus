@@ -27,6 +27,16 @@ const propTypes = {
    */
   content2: PropTypes.any,
   /**
+   * The class name of the underlying layer
+   * @type {string}
+   */
+  content1Classname: PropTypes.string,
+  /**
+   * The class name of the top layer
+   * @type {string}
+   */
+  content2Classname: PropTypes.string,
+  /**
    * The shape of the cursor
    * @type {any}
    */
@@ -41,6 +51,8 @@ const defaultProps = {
   height: "100vh",
   content1: "Content1",
   content2: "Content2",
+  content1Classname: "Content1",
+  content2Classname: "Content2",
   cursor: "col-resize",
 };
 
@@ -90,7 +102,13 @@ const Content2 = styled.article.attrs((props) => ({
  * Displays the component
  */
 const Demo = (props) => {
-  const { content1, content2, ...rest } = props;
+  const {
+    content1,
+    content2,
+    content1Classname,
+    content2Classname,
+    ...rest
+  } = props;
 
   /**
    * Switches on/off the mouse event
@@ -98,7 +116,23 @@ const Demo = (props) => {
    */
   const [enabled, setEnabled] = useState(true);
 
-  const handleOnClick = () => {
+  /**
+   * Handles the click event
+   * @param  {SyntheticEvent} event The event
+   * @return null
+   */
+  const handleOnClick = (event) => {
+    const { target } = event;
+    const { classList } = target;
+    const { value } = classList;
+    console.log("target:", value);
+
+    const clickMustBeHandled =
+      (value && value.includes(content1Classname)) ||
+      value.includes(content2Classname);
+
+    if (!clickMustBeHandled) return;
+
     setEnabled(!enabled);
   };
 
@@ -110,9 +144,22 @@ const Demo = (props) => {
 
   const handleMouseMove = (event) => {
     if (!enabled) return;
+
     const { clientX } = event;
     setMouseX(clientX);
   };
+
+  const contentWithClickableElement = (
+    <>
+      <p>Content</p>
+      <p>
+        <button>button</button>
+      </p>
+      <p>
+        <a href="#">Inline link</a>
+      </p>
+    </>
+  );
 
   return (
     <>
@@ -125,7 +172,7 @@ const Demo = (props) => {
         {...rest}
       >
         <Content1 className="Content1" mouseX={mouseX} {...rest}>
-          {content1}
+          {contentWithClickableElement}
         </Content1>
         <Content2 className="Content2" mouseX={mouseX} {...rest}>
           {content2}
