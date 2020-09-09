@@ -42,11 +42,11 @@ const propTypes = {
    */
   cursor: PropTypes.any,
   /**
-   * On click the effect can be disabled / enabled.
+   * On double click the effect can be disabled / enabled.
    * This comes handy when the user wants to interact with another element.
    * @type {boolean}
    */
-  disableEffectOnClick: PropTypes.bool,
+  disableEffectOnDoubleClick: PropTypes.bool,
 };
 
 /**
@@ -56,13 +56,13 @@ const defaultProps = {
   width: "100vw",
   height: "100vh",
   content1:
-    "Content1. Click anywhere to stop the mouse drag effect. Then click again to re-enable the effect.",
+    "Content1. Double click anywhere to stop the mouse drag effect. Then double click again to re-enable the effect.",
   content2:
-    "Content2. Click anywhere to stop the mouse drag effect. Then click again to re-enable the effect.",
+    "Content2. Double click anywhere to stop the mouse drag effect. Then double click again to re-enable the effect.",
   content1Classname: "Content1",
   content2Classname: "Content2",
   cursor: "col-resize",
-  disableEffectOnClick: true,
+  disableEffectOnDoubleClick: true,
 };
 
 const Container = styled("section")((props) => ({
@@ -74,7 +74,6 @@ const Container = styled("section")((props) => ({
 }));
 
 const Content1 = styled("section")((props) => ({
-  ...props,
   width: `${props.width}`,
   height: `${props.height}`,
   position: "absolute",
@@ -87,7 +86,6 @@ const Content1 = styled("section")((props) => ({
  * - suggested by the console
  */
 const Content2 = styled.section.attrs((props) => ({
-  ...props,
   style: {
     left: `${props.mouseX}px`,
     width: `${props.width}`,
@@ -107,7 +105,7 @@ const Janus = (props) => {
     content2,
     content1Classname,
     content2Classname,
-    disableEffectOnClick,
+    disableEffectOnDoubleClick,
     ...rest
   } = props;
 
@@ -118,29 +116,19 @@ const Janus = (props) => {
   const [enabled, setEnabled] = useState(true);
 
   /**
-   * Handles the click event
+   * Handles the souble click event
    * @param  {SyntheticEvent} event The event
    * @return null
    */
-  const handleOnClick = (event) => {
+  const handleOnDoubleClick = (event) => {
     /**
-     * The click can be enabled / disabled by props
+     * The double click can be enabled / disabled by props
      */
-    if (!disableEffectOnClick) return;
+    if (!disableEffectOnDoubleClick) return;
 
     const { target } = event;
     const { classList } = target;
     const { value } = classList;
-
-    /**
-     * The click is handled only when it happens on a blank space.
-     * When the user clicks on a button, link etc the click is not handled.
-     */
-    const clickMustBeHandled =
-      (value && value.includes(content1Classname)) ||
-      value.includes(content2Classname);
-
-    if (!clickMustBeHandled) return;
 
     setEnabled(!enabled);
   };
@@ -166,11 +154,13 @@ const Janus = (props) => {
     setMouseX(clientX);
   };
 
+  console.log("enabled:", enabled);
+
   return (
     <Container
       className="Janus"
       onMouseMove={handleMouseMove}
-      onClick={handleOnClick}
+      onDoubleClick={handleOnDoubleClick}
       enabled={enabled}
       {...rest}
     >

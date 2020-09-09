@@ -29,25 +29,33 @@ CustomCursor.args = {
   cursor: "pointer",
 };
 
-export const DisableClick = Template.bind({});
-DisableClick.args = {
+export const DisableDoubleClick = Template.bind({});
+DisableDoubleClick.args = {
   content1: (
     <>
       <p>
-        The click event starting/stopping the mouse drag effect is now disabled.
+        The double click event starting/stopping the mouse drag effect is now
+        disabled.
       </p>
-      <p>You can click anywhere and the mouse drag effect won't be disabled.</p>
+      <p>
+        You can double click anywhere and the mouse drag effect won't be
+        disabled.
+      </p>
     </>
   ),
   content2: (
     <>
       <p>
-        The click event starting/stopping the mouse drag effect is now disabled.
+        The double click event starting/stopping the mouse drag effect is now
+        disabled.
       </p>
-      <p>You can click anywhere and the mouse drag effect won't be disabled.</p>
+      <p>
+        You can double click anywhere and the mouse drag effect won't be
+        disabled.
+      </p>
     </>
   ),
-  disableEffectOnClick: false,
+  disableEffectOnDoubleClick: false,
 };
 
 export const CustomClickableContent = Template.bind({});
@@ -57,8 +65,8 @@ CustomClickableContent.args = {
       <p>Content</p>
       <p>Contains clickable elements</p>
       <p>
-        Click anywhere on a blank spot to stop the mouse drag effect then click
-        one of these elements
+        Double click anywhere on a blank spot to stop the mouse drag effect then
+        click one of these elements
       </p>
       <p>
         <button id="#button">button</button>
@@ -80,8 +88,8 @@ CustomClickableContent.args = {
       <p>Content</p>
       <p>Contains clickable elements</p>
       <p>
-        Click anywhere on a blank spot to stop the mouse drag effect then click
-        one of these elements
+        Double click anywhere on a blank spot to stop the mouse drag effect then
+        click one of these elements
       </p>
       <p>
         <button id="#button">button</button>
