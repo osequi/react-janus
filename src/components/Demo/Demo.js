@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 
 /**
  * Imports other components and hooks
@@ -31,15 +31,28 @@ const GlobalStyle = createGlobalStyle`
  `;
 
 /**
+ * Defines the content styles
+ */
+const ContentStyle = styled("div")((props) => ({
+  padding: "1em",
+  fontFamily: "monospace",
+  fontSize: "150%",
+}));
+
+/**
  * Displays the component
  */
 const Demo = (props) => {
   const { janus } = props;
+  const { content1, content2 } = janus;
+
+  const Content1 = <ContentStyle>{content1}</ContentStyle>;
+  const Content2 = <ContentStyle>{content2}</ContentStyle>;
 
   return (
     <>
       <GlobalStyle />
-      <Janus {...janus} />
+      <Janus {...janus} content1={Content1} content2={Content2} />
     </>
   );
 };
