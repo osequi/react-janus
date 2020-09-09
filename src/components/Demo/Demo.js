@@ -31,12 +31,27 @@ const GlobalStyle = createGlobalStyle`
  `;
 
 /**
- * Defines the content styles
+ * Defines the content1 styles
  */
-const ContentStyle = styled("div")((props) => ({
+const Content1 = styled("article")((props) => ({
+  width: "100vw",
+  height: "100vh",
   padding: "1em",
   fontFamily: "monospace",
   fontSize: "150%",
+}));
+
+/**
+ * Defines the content2 styles
+ */
+const Content2 = styled("article")((props) => ({
+  width: "100vw",
+  height: "100vh",
+  padding: "1em",
+  fontFamily: "monospace",
+  fontSize: "150%",
+  background: "black",
+  color: "white",
 }));
 
 /**
@@ -46,13 +61,13 @@ const Demo = (props) => {
   const { janus } = props;
   const { content1, content2 } = janus;
 
-  const Content1 = <ContentStyle>{content1}</ContentStyle>;
-  const Content2 = <ContentStyle>{content2}</ContentStyle>;
+  const content1Styled = <Content1>{content1}</Content1>;
+  const content2Styled = <Content2>{content2}</Content2>;
 
   return (
     <>
       <GlobalStyle />
-      <Janus {...janus} content1={Content1} content2={Content2} />
+      <Janus {...janus} content1={content1Styled} content2={content2Styled} />
     </>
   );
 };

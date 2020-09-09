@@ -73,7 +73,8 @@ const Container = styled("section")((props) => ({
   cursor: props.enabled ? `${props.cursor}` : "auto",
 }));
 
-const Content1 = styled("article")((props) => ({
+const Content1 = styled("section")((props) => ({
+  ...props,
   width: `${props.width}`,
   height: `${props.height}`,
   position: "absolute",
@@ -85,7 +86,8 @@ const Content1 = styled("article")((props) => ({
  * Optimized version
  * - suggested by the console
  */
-const Content2 = styled.article.attrs((props) => ({
+const Content2 = styled.section.attrs((props) => ({
+  ...props,
   style: {
     left: `${props.mouseX}px`,
     width: `${props.width}`,
@@ -94,8 +96,6 @@ const Content2 = styled.article.attrs((props) => ({
 }))`
   position: absolute;
   top: 0;
-  color: white;
-  background: black;
 `;
 
 /**
