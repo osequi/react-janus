@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styled, { createGlobalStyle } from "styled-components";
+import styled, { css, createGlobalStyle } from "styled-components";
 
 /**
  * Imports other components and hooks
@@ -33,7 +33,7 @@ const GlobalStyle = createGlobalStyle`
 /**
  * Defines the content1 styles
  */
-const Content1 = styled("article")((props) => ({
+const Content1 = css((props) => ({
   width: "100vw",
   height: "100vh",
   padding: "1em",
@@ -44,7 +44,7 @@ const Content1 = styled("article")((props) => ({
 /**
  * Defines the content2 styles
  */
-const Content2 = styled("article")((props) => ({
+const Content2 = css((props) => ({
   width: "100vw",
   height: "100vh",
   padding: "1em",
@@ -59,15 +59,11 @@ const Content2 = styled("article")((props) => ({
  */
 const Demo = (props) => {
   const { janus } = props;
-  const { content1, content2 } = janus;
-
-  const content1Styled = <Content1>{content1}</Content1>;
-  const content2Styled = <Content2>{content2}</Content2>;
 
   return (
     <>
       <GlobalStyle />
-      <Janus {...janus} content1={content1Styled} content2={content2Styled} />
+      <Janus {...janus} content1Style={Content1} content2Style={Content2} />
     </>
   );
 };
