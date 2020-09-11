@@ -58,6 +58,23 @@ const propTypes = {
    * @type {any}
    */
   usageMessage: PropTypes.any,
+  /**
+   * The miliseconds while the usage message will be displayed
+   * @type {number}
+   */
+  usageMessageDisplayDuration: PropTypes.number,
+  /**
+   * The style of the usage container
+   * Expects props for positioning
+   * @type {any}
+   */
+  usageContainerStyle: PropTypes.any,
+  /**
+   * The style of the usage message
+   * Expects props for coloring, spacing
+   * @type {any}
+   */
+  usageMessageStyle: PropTypes.any,
 };
 
 /**
@@ -88,6 +105,18 @@ const defaultProps = {
   disableEffectOnDoubleClick: true,
   displayUsageOnStart: true,
   usageMessage: "Double click to disable / enable drag",
+  usageMessageDisplayDuration: 5000,
+  usageContainerStyle: css({
+    width: "100%",
+    position: "absolute",
+    zIndex: 100,
+    bottom: "1em",
+    justifyContent: "center",
+  }),
+  usageMessageStyle: css({
+    background: "white",
+    padding: "1em",
+  }),
 };
 
 const Container = styled("section")((props) => ({
@@ -126,19 +155,14 @@ const Content2 = styled.section.attrs((props) => ({
   top: 0;
 `;
 
-const Usage = styled("section")((props) => ({
-  width: "100%",
-  position: "absolute",
-  zIndex: 100,
-  bottom: "1em",
-  display: props.usageDisplayed ? "flex" : "none",
-  justifyContent: "center",
-}));
+const Usage = styled.section`
+  ${(props) => props.usageContainerStyle};
+  display: ${(props) => (props.usageDisplayed ? "flex" : "none")};
+`;
 
-const Message = styled("div")((props) => ({
-  background: "white",
-  padding: "1em",
-}));
+const Message = styled.p`
+  ${(props) => props.usageMessageStyle};
+`;
 
 /**
  * Displays the component
@@ -155,19 +179,32 @@ const Janus = (props) => {
     disableEffectOnDoubleClick,
     displayUsageOnStart,
     usageMessage,
+    usageMessageDisplayDuration,
+    usageContainerStyle,
+    usageMessageStyle,
   } = props;
-
-  /**
-   * Manages the state of the effect
-   * @type {boolean}
-   */
-  const [enabled, setEnabled] = useState(true);
 
   /**
    * Manages the state of the usage message
    * @type {boolean}
    */
   const [usageDisplayed, setUsageDisplayed] = useState(displayUsageOnStart);
+
+  /**
+   * Sets up animation for the usage message
+   * @type {object}
+   */
+  const usageAnimation = useSpring({
+    config: { duration: usageMessageDisplayDuration * 0.75 },
+    from: { opacity: 0 },
+    to: [{ opacity: 1 }, { opacity: 0 }],
+  });
+
+  /**
+   * Manages the state of the effect
+   * @type {boolean}
+   */
+  const [enabled, setEnabled] = useState(true);
 
   /**
    * Handles the double click event
@@ -226,19 +263,19 @@ const Janus = (props) => {
   };
 
   /**
-   * Displays the usage message on load
+   * Hides the usage message after a while
+   * - `react-spring` cannot cancel right now an animation once executed
+   * @see https://github.com/react-spring/react-spring/issues/1124
    */
   useEffect(() => {
     if (!displayUsageOnStart) return;
 
     const timer = setTimeout(() => {
       setUsageDisplayed(false);
-    }, 2500);
+    }, usageMessageDisplayDuration);
 
     return () => clearTimeout(timer);
   }, []);
-
-  const a = useSpring({ opacity: 0, from: { opacity: 1 } });
 
   return (
     <Container
@@ -251,11 +288,18 @@ const Janus = (props) => {
       cursor={cursor}
       enabled={enabled}
     >
-      <Usage className="Usage" usageDisplayed={usageDisplayed}>
-        <Message>
-          <animated.div style={a}>{usageMessage}</animated.div>
-        </Message>
+      <Usage
+        className="Usage"
+        usageDisplayed={usageDisplayed}
+        usageContainerStyle={usageContainerStyle}
+      >
+        <animated.div style={usageAnimation}>
+          <Message usageMessageStyle={usageMessageStyle}>
+            {usageMessage}
+          </Message>
+        </animated.div>
       </Usage>
+
       <Content1
         className="JanusContent1"
         content1Style={content1Style}
