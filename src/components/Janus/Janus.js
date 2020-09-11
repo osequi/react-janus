@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components";
+import { useSpring, animated } from "react-spring";
 
 /**
  * Defines the prop types
@@ -47,6 +48,16 @@ const propTypes = {
    * @type {boolean}
    */
   disableEffectOnDoubleClick: PropTypes.bool,
+  /**
+   * A short usage message can be displayed after the page load
+   * @type {boolean}
+   */
+  displayUsageOnStart: PropTypes.bool,
+  /**
+   * The usage message displayed after page load
+   * @type {any}
+   */
+  usageMessage: PropTypes.any,
 };
 
 /**
@@ -75,6 +86,8 @@ const defaultProps = {
   }),
   cursor: "col-resize",
   disableEffectOnDoubleClick: true,
+  displayUsageOnStart: true,
+  usageMessage: "Double click to disable / enable drag",
 };
 
 const Container = styled("section")((props) => ({
@@ -113,6 +126,20 @@ const Content2 = styled.section.attrs((props) => ({
   top: 0;
 `;
 
+const Usage = styled("section")((props) => ({
+  width: "100%",
+  position: "absolute",
+  zIndex: 100,
+  bottom: "1em",
+  display: props.usageDisplayed ? "flex" : "none",
+  justifyContent: "center",
+}));
+
+const Message = styled("div")((props) => ({
+  background: "white",
+  padding: "1em",
+}));
+
 /**
  * Displays the component
  */
@@ -126,6 +153,8 @@ const Janus = (props) => {
     content2Style,
     cursor,
     disableEffectOnDoubleClick,
+    displayUsageOnStart,
+    usageMessage,
   } = props;
 
   /**
@@ -135,11 +164,22 @@ const Janus = (props) => {
   const [enabled, setEnabled] = useState(true);
 
   /**
+   * Manages the state of the usage message
+   * @type {boolean}
+   */
+  const [usageDisplayed, setUsageDisplayed] = useState(displayUsageOnStart);
+
+  /**
    * Handles the double click event
    * @param  {SyntheticEvent} event The event
    * @return null
    */
   const handleOnDoubleClick = () => {
+    /**
+     * On the first double click the usage message goes hidden
+     */
+    setUsageDisplayed(false);
+
     /**
      * The double click can be enabled / disabled by props
      */
@@ -185,6 +225,21 @@ const Janus = (props) => {
     setMouseX(clientX);
   };
 
+  /**
+   * Displays the usage message on load
+   */
+  useEffect(() => {
+    if (!displayUsageOnStart) return;
+
+    const timer = setTimeout(() => {
+      setUsageDisplayed(false);
+    }, 2500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const a = useSpring({ opacity: 0, from: { opacity: 1 } });
+
   return (
     <Container
       className="Janus"
@@ -196,6 +251,11 @@ const Janus = (props) => {
       cursor={cursor}
       enabled={enabled}
     >
+      <Usage className="Usage" usageDisplayed={usageDisplayed}>
+        <Message>
+          <animated.div style={a}>{usageMessage}</animated.div>
+        </Message>
+      </Usage>
       <Content1
         className="JanusContent1"
         content1Style={content1Style}
