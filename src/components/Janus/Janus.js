@@ -135,7 +135,7 @@ const Janus = (props) => {
   const [enabled, setEnabled] = useState(true);
 
   /**
-   * Handles the souble click event
+   * Handles the double click event
    * @param  {SyntheticEvent} event The event
    * @return null
    */
@@ -169,10 +169,27 @@ const Janus = (props) => {
     setMouseX(clientX);
   };
 
+  /**
+   * Handles the touch move
+   * @param  {SyntheticEvent} event The event
+   * @return null
+   */
+  const handleTouchMove = (event) => {
+    /**
+     * The effect works only when it's enabled
+     */
+    if (!enabled) return;
+
+    const { touches } = event;
+    const { clientX } = touches[0];
+    setMouseX(clientX);
+  };
+
   return (
     <Container
       className="Janus"
       onMouseMove={handleMouseMove}
+      onTouchMove={handleTouchMove}
       onDoubleClick={handleOnDoubleClick}
       width={width}
       height={height}
